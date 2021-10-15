@@ -133,6 +133,7 @@ pub struct Claim<'info> {
     pub claim_key: AccountInfo<'info>,
     #[account(signer)]
     pub pool_key: AccountInfo<'info>,
+    #[account(mut)]
     pub mint: Account<'info, Mint>,
     #[account(mut, has_one = mint)]
     pub token_receiver: Account<'info, TokenAccount>,

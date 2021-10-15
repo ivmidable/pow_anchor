@@ -64,7 +64,7 @@ describe("PoW Anchor", () => {
         // Fetch the newly created account from the cluster.
         const account = await pow_program.account.powBase.fetch(powAccount.publicKey);
 
-        console.log(account);
+        //console.log(account);
         assert.ok(account.tokenMint.toBase58() === mint.publicKey.toBase58());
 
         // Store the account for the next test.
@@ -78,9 +78,16 @@ describe("PoW Anchor", () => {
         const mint = _mint;
         const pow_program = anchor.workspace.Pow;
         let user = anchor.web3.Keypair.generate();
+
+        //air drop to user acct so they can create token acct.
+        let res = await provider.connection.requestAirdrop(user.publicKey, 9 * anchor.web3.LAMPORTS_PER_SOL);
+        await provider.connection.confirmTransaction(res);
+
+        //console.log(mint);
         const token_mint = new splToken.Token(provider.connection, mint.publicKey, splToken.TOKEN_PROGRAM_ID, user);
         let user_token_id = await token_mint.getOrCreateAssociatedAccountInfo(user.publicKey);
 
+        //console.log(powAccount);
         const account_data = await pow_program.account.powBase.fetch(powAccount.publicKey);
 
         //mining difficulty is set to 1, so the target is 21.
@@ -88,24 +95,28 @@ describe("PoW Anchor", () => {
         //if it was set to 3 target would be 21e800
         //etc..
         let keys = mine(account_data.hash, "21");
-        console.log(keys);
 
         await pow_program.rpc.claim(
             {
                 accounts: {
                     powInstance: powAccount.publicKey,
-                    claimKey: keys[0],
-                    poolKey: keys[1],
+                    claimKey: keys.claim.publicKey,
+                    poolKey: keys.pool.publicKey,
                     mint: mint.publicKey,
                     mintAuth: mintAuth,
                     tokenReceiver: user_token_id.address,
                     tokenProgram: splToken.TOKEN_PROGRAM_ID,
                 },
-                signers: [keys[0], keys[1]],
+                signers: [keys.claim, keys.pool],
             }
         );
 
-    });
+        let user_token_info = await token_mint.getAccountInfo(user_token_id.address);
+        
+        //user wallet should have the tokens they mined.
+        assert.ok(user_token_info.amount.toString() === new anchor.BN(100*anchor.web3.LAMPORTS_PER_SOL).toString());
+        //if mining difficulty is set higher than 1, you need to raise this timeout limit.
+    }).timeout(10000);
 
 });
 
@@ -119,7 +130,7 @@ function mine(hash, magic) {
     let hash_buf = Buffer.from(hash, 'hex');
     while (true) {
         keypair = new anchor.web3.Keypair();
-        let check = sha256(Buffer.concat([hash_buf, keypair.publicKey.toBuffer()])).toString('hex');
+        let check = sha256(Buffer.concat([hash_buf, keypair.publicKey.toBuffer(), pool.publicKey.toBuffer()])).toString('hex');
         if (check.startsWith(magic) === true) {
             return {claim:keypair, pool:pool};
         }
