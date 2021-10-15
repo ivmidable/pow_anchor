@@ -14,10 +14,7 @@ describe("PoW Anchor", () => {
 
     it("Initialize", async () => {
         // The program to execute.
-        //const token_mint = new splToken.Token(provider.connection, token_mint_id, splToken.TOKEN_PROGRAM_ID, bidder_wallet);
         const pow_program = anchor.workspace.Pow;
-
-        //console.log(escrow_program);
 
         // The Account to create.
         const powAccount = anchor.web3.Keypair.fromSecretKey(new Uint8Array([
@@ -44,7 +41,7 @@ describe("PoW Anchor", () => {
         );
 
 
-        // Create the new escrow account and initialize it with the program.
+        // Create the new pow account and initialize it with the program.
         await pow_program.rpc.initialize(
             bump,
             {
@@ -73,7 +70,7 @@ describe("PoW Anchor", () => {
         _mintAuth = mintAuth;
     });
 
-    it("Mine PoW Anchor and claim SPL Token", async () => {
+    it("Mine PoW Anchor and claim SPL Tokens", async () => {
         const powAccount = _powAccount;
         const mint = _mint;
         const pow_program = anchor.workspace.Pow;
