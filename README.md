@@ -1,12 +1,12 @@
 # PoW Anchor V0
 
 
-####In the project directory
-#####Start the test validator.
+#### In the project directory
+##### Start the test validator.
 ```sh
 solana-test-validator
 ```
-#####and then close it.
+##### and then close it.
 
 ## Building
 
