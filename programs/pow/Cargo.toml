@@ -1,0 +1,17 @@
+[package]
+name = "pow"
+version = "0.1.0"
+description = "PoW Anchor"
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "pow"
+
+[features]
+no-entrypoint = []
+cpi = ["no-entrypoint"]
+
+[dependencies]
+anchor-lang = "0.17.0"
+anchor-spl= "0.17.0"

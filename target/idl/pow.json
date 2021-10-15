@@ -1,0 +1,170 @@
+{
+  "version": "0.0.0",
+  "name": "pow",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "powInstance",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "mint",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "payer",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "mintAuth",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "bump",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "claim",
+      "accounts": [
+        {
+          "name": "powInstance",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "claimKey",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "poolKey",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "mint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenReceiver",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "mintAuth",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "PowBase",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "tokenMint",
+            "type": "publicKey"
+          },
+          {
+            "name": "epoch",
+            "type": "u64"
+          },
+          {
+            "name": "minedCount",
+            "type": "u64"
+          },
+          {
+            "name": "minedThisEpoch",
+            "type": "u64"
+          },
+          {
+            "name": "hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "diff",
+            "type": "u8"
+          },
+          {
+            "name": "tokens",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 300,
+      "name": "IncorrectOwner",
+      "msg": "Account does not have correct owner."
+    },
+    {
+      "code": 301,
+      "name": "Uninitialized",
+      "msg": "Account is not initialized."
+    },
+    {
+      "code": 302,
+      "name": "InvalidInitAuth",
+      "msg": "Init Authority is invalid."
+    },
+    {
+      "code": 303,
+      "name": "InvalidClaimHash",
+      "msg": "Claim hash is invalid."
+    },
+    {
+      "code": 304,
+      "name": "MaxMinedEpoch",
+      "msg": "Maxmium ammount mined this epoch."
+    }
+  ],
+  "metadata": {
+    "address": "7TM227WVFEwEjWdk3euwyd1JdjTs4wyDCy6euRzz5M5T"
+  }
+}
