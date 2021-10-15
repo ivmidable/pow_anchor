@@ -1,4 +1,4 @@
-# Solana Hero Contracts V0
+# PoW Anchor V0
 
 
 ####In the project directory
