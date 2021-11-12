@@ -35,11 +35,11 @@ pub mod pow {
 
         let clock = Clock::get()?;
 
-        if clock.epoch - pow_inst.epoch > 0 {
+        if clock.epoch.checked_sub(pow_inst.epoch).unwrap() > 0 {
             pow_inst.epoch = clock.epoch;
             pow_inst.mined_this_epoch = 0;
             if pow_inst.mined_this_epoch >= 1320 {
-                pow_inst.diff += 1;
+                pow_inst.diff = pow_inst.diff.checked_add(1).unwrap();
                 pow_inst.tokens = pow_inst.tokens/2;
             }
         }
